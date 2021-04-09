@@ -9,7 +9,13 @@ export default function TaskList(props) {
       <FlatList 
         data={props.tasks}
         keyExtractor={(item, index) => String(index)}
-        renderItem={({ item }) => <Task title={item.title} />}
+        renderItem={({ item }) => (
+          <Task 
+            item={item}
+            removeTask={props.removeTask} 
+            checkTask={props.checkTask} 
+          />
+        )}
       />
     </View>
   );

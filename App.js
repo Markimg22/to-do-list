@@ -1,48 +1,53 @@
 import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Alert, KeyboardAvoidingView, Platform } from 'react-native';
 
-import Task from './src/components/Task';
 import Form from './src/components/Form';
 import TaskList from './src/components/TaskList';
 
 export default function App() {
-  const [tasks, setTasks] = useState([
-    { title: 'Estudar JS' },
-    { title: 'Estudar CSS' },
-    { title: 'Estudar HTML' },
-    { title: 'Estudar React' },
-    { title: 'Estudar JS' },
-    { title: 'Estudar CSS' },
-    { title: 'Estudar HTML' },
-    { title: 'Estudar React JS' },
-    { title: 'Estudar JS' },
-    { title: 'Estudar CSS' },
-    { title: 'Estudar HTML' },
-    { title: 'Estudar React' },
-    { title: 'Estudar JS' },
-    { title: 'Estudar CSS' },
-    { title: 'Estudar HTML' },
-    { title: 'Estudar React JS' },
-    { title: 'Estudar JS' },
-    { title: 'Estudar CSS' },
-    { title: 'Estudar HTML' },
-    { title: 'Estudar React' },
-    { title: 'Estudar JS' },
-    { title: 'Estudar CSS' },
-    { title: 'Estudar HTML' },
-    { title: 'Estudar React JS' },
-  ]);
+  const [tasks, setTasks] = useState([]);
+  const [title, setTitle] = useState('');
+
+  const createTask = () => {
+    const search = tasks.filter(task => task.title === title);
+
+    if (search.length !== 0) {
+      Alert.alert('Atenção', 'Nome da tarefa repetido');
+      return;
+    }
+
+    setTasks([...tasks, { title, isCompleted: false }]);
+    setTitle('');
+  };
+
+  const removeTask = (item) => {
+    setTasks(tasks.filter(task => task.title !== item.title));
+  };
+
+  const checkTask = (item) => {
+    tasks.map(task => {
+      if (task.title === item.title) {
+        task.isCompleted = !task.isCompleted;
+      }
+    });
+
+    setTasks([...tasks]);
+  };
 
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView 
+      keyboardVerticalOffset={0}
+      behavior="padding"
+      style={styles.container}
+      enabled={Platform.OS === 'ios'}>
       <StatusBar backgroundColor="#333238" />
       <View style={styles.titleContainer}>
         <Text style={styles.title}>Adicione suas tarefas.</Text>
       </View>
-      <TaskList tasks={tasks} />
-      <Form />
-    </View>
+      <TaskList tasks={tasks} removeTask={removeTask} checkTask={checkTask} />
+      <Form createTask={createTask} title={title} setTitle={setTitle} />
+    </KeyboardAvoidingView>
   );
 }
 
