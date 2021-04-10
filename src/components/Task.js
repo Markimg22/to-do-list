@@ -1,13 +1,27 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
 export default function Task(props) {
   return (
     <View style={styles.container}>
-      <Icon name="circle" style={styles.icon} />
-      <Text style={styles.title}>{props.title}</Text>
-      <Icon name="times-circle" style={styles.icon} color="red" />
+      <TouchableOpacity onPress={() => props.checkTask(props.item)}>
+        {props.item.isCompleted ? (
+          <Icon name="check-circle" style={styles.icon} />
+        ) : (
+          <Icon name="circle" style={styles.icon} />
+        )}
+      </TouchableOpacity>
+      <Text 
+        style={[
+          styles.title, 
+          {textDecorationLine: props.item.isCompleted ? 'line-through' : 'none'}
+        ]}>
+        {props.item.title}
+      </Text>
+      <TouchableOpacity onPress={() => props.removeTask(props.item)}>
+        <Icon name="times-circle" style={styles.icon} color="red" />
+      </TouchableOpacity>
     </View>
   );
 }

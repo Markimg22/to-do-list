@@ -1,14 +1,16 @@
 import React from 'react';
 import { View, TextInput, StyleSheet, TouchableOpacity, Text } from 'react-native';
 
-export default function form() {
+export default function Form(props) {
   return (
     <View style={styles.container}>
       <TextInput 
+        value={props.title}
         style={styles.input}
         placeholder="Insira uma atividade"
+        onChangeText={(text) => props.setTitle(text)}
       />
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity style={styles.button} onPress={() => props.createTask()}>
         <Text style={styles.buttonText}>Adicionar</Text>
       </TouchableOpacity>
     </View>
